@@ -4,6 +4,10 @@
 # Python Stuffs
 __pycache__
 
+# Logs
+logs
+*.log
+
 # Databases
 migrations
 *.db
