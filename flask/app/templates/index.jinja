@@ -1,12 +1,7 @@
 {% extends "base.jinja" %}
 
 {% block content %}
-
-  {% if user.username %}
-  <h1>Hello, {{ user.username }}!</h1>
-  {% else %}
-  <h1>Hello, Stranger!</h1>
-  {% endif %}
+  <h1>Hello, {{ current_user.username }}!</h1>
 
   {% if posts %}
   
@@ -17,8 +12,7 @@
   {% endfor %}
   
   {% else %}
-  <h2>We don't have any post yet!</h2>
-
+  <h2>We don't have any post yet! Start with something new today!</h2>
   {% endif %}
 
 {% endblock %}
