@@ -1,0 +1,24 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+
+  {% if user.username %}
+  <h1>Hello, {{ user.username }}!</h1>
+  {% else %}
+  <h1>Hello, Stranger!</h1>
+  {% endif %}
+
+  {% if posts %}
+  
+  {% for post in posts %}
+  <div>
+    <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
+  </div>
+  {% endfor %}
+  
+  {% else %}
+  <h2>We don't have any post yet!</h2>
+
+  {% endif %}
+
+{% endblock %}

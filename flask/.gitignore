@@ -1,2 +1,12 @@
 # Virtual Environments
 .pyenv
+
+# Python Stuffs
+__pycache__
+
+# Databases
+migrations
+*.db
+
+# VSCode
+.vscode
