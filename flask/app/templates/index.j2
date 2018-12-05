@@ -1,15 +1,24 @@
 {% extends "base.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
+{% block app_content %}
 <h1>Hello, {{ current_user.username }}!</h1>
 
-{% if posts %}
+{% if form %}
+<form class="form" action="" method="post">
+  {{ wtf.form_field(form.post, rows=5) }}
+  {{ wtf.form_field(form.submit) }}
+</form>
+<br>
+{% endif %}
+
+{% if posts and posts|length > 0 %}
 
 {% for post in posts %}
-<div>
-  <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
-</div>
+{% include '_post.j2' %}
 {% endfor %}
+
+{% include "_page_nav.j2" %}
 
 {% else %}
 <h2>We don't have any post yet! Start with something new today!</h2>
