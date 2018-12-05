@@ -103,3 +103,32 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.j2', title='Edit Profile', form=form)
+
+
+@app.route('/follow/<username>')
+def follow(username):
+    user = validate_user(username, 'follow')
+    current_user.follow(user)
+    db.session.commit()
+    flash('You are following {}!'.format(username))
+    return redirect(url_for('user', username=username))
+
+
+@app.route('/unfollow/<username>')
+def unfollow(username):
+    user = validate_user(username, 'unfollow')
+    current_user.unfollow(user)
+    db.session.commit()
+    flash('You are no longer following {}!'.format(username))
+    return redirect(url_for('user', username=username))
+
+
+def validate_user(username, action):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('Cannot {} yourself'.foramt(action))
+        return redirect(url_for('user', username=username))
+    return user
