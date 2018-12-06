@@ -6,9 +6,8 @@
       </a>
     </td>
     <td>
-      At {{ post.timestamp.strftime('%Y.%m.%d %H:%M:%S') }}&nbsp
       <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
-      says:<br>{{ post.body }}
+      said {{ moment(post.timestamp).fromNow() }}:<br>{{ post.body }}
     </td>
   </tr>
 </table>

@@ -16,7 +16,7 @@ from setuptools import setup
 ####################################################
 requires = [
     'flask', 'flask-wtf', 'flask-login', 'flask-sqlalchemy', 'flask_migrate',
-    'flask-bootstrap',
+    'flask-bootstrap', 'flask-moment',
 ]
 
 dev_requires = [

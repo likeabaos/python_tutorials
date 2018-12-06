@@ -5,7 +5,8 @@
 <h1>Hello, {{ current_user.username }}!</h1>
 
 {% if form %}
-<form class="form" action="" method="post">
+<form action="" method="post">
+  {{ form.hidden_tag() }}
   {{ wtf.form_field(form.post, rows=5) }}
   {{ wtf.form_field(form.submit) }}
 </form>
