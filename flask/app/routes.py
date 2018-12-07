@@ -1,10 +1,10 @@
-from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm
-from app.models import User, Post
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from datetime import datetime
+from app import app, db
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm
+from app.models import User, Post
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -25,7 +25,7 @@ def index():
     next_url = url_for('index', page=posts.next_num) if posts.has_next else None
 
     return render_template('index.j2', title='Home', form=form, posts=posts.items,
-        prev_url=prev_url, next_url=next_url)
+                           prev_url=prev_url, next_url=next_url)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -35,16 +35,16 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+        _user = User.query.filter_by(username=form.username.data).first()
+        if _user is None or not _user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        
-        login_user(user, remember=form.remember_me.data)
+
+        login_user(_user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-            
+
         return redirect(next_page)
 
     return render_template('login.j2', title='Sign In', form=form)
@@ -63,9 +63,9 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
+        _user = User(username=form.username.data, email=form.email.data)
+        _user.set_password(form.password.data)
+        db.session.add(_user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
@@ -76,16 +76,16 @@ def register():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
+    _user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.filter_by(user_id=user.id).order_by(
+    posts = Post.query.filter_by(user_id=_user.id).order_by(
         Post.timestamp.desc()).paginate(page, 3, False)
-    prev_url = url_for('user',
-        username=username, page=posts.prev_num) if posts.has_prev else None
-    next_url = url_for('user',
-        username=username, page=posts.next_num) if posts.has_next else None
-    return render_template('user.j2', user=user, posts=posts.items,
-        prev_url=prev_url, next_url=next_url)
+    prev_url = url_for('user', username=username,
+                       page=posts.prev_num) if posts.has_prev else None
+    next_url = url_for('user', username=username,
+                       page=posts.next_num) if posts.has_next else None
+    return render_template('user.j2', user=_user, posts=posts.items,
+                           prev_url=prev_url, next_url=next_url)
 
 
 @app.before_request
@@ -113,8 +113,8 @@ def edit_profile():
 
 @app.route('/follow/<username>')
 def follow(username):
-    user = validate_user(username, 'follow')
-    current_user.follow(user)
+    _user = validate_user(username, 'follow')
+    current_user.follow(_user)
     db.session.commit()
     flash('You are following {}!'.format(username))
     return redirect(url_for('user', username=username))
@@ -122,22 +122,22 @@ def follow(username):
 
 @app.route('/unfollow/<username>')
 def unfollow(username):
-    user = validate_user(username, 'unfollow')
-    current_user.unfollow(user)
+    _user = validate_user(username, 'unfollow')
+    current_user.unfollow(_user)
     db.session.commit()
     flash('You are no longer following {}!'.format(username))
     return redirect(url_for('user', username=username))
 
 
 def validate_user(username, action):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
+    _user = User.query.filter_by(username=username).first()
+    if _user is None:
         flash('User {} not found'.format(username))
         return redirect(url_for('index'))
-    if user == current_user:
-        flash('Cannot {} yourself'.foramt(action))
+    if _user == current_user:
+        flash('Cannot {} yourself'.format(action))
         return redirect(url_for('user', username=username))
-    return user
+    return _user
 
 
 @app.route('/explore')
@@ -148,4 +148,4 @@ def explore():
     prev_url = url_for('explore', page=posts.prev_num) if posts.has_prev else None
     next_url = url_for('explore', page=posts.next_num) if posts.has_next else None
     return render_template('index.j2', title='Explore', posts=posts.items,
-        prev_url=prev_url, next_url=next_url)
+                           prev_url=prev_url, next_url=next_url)

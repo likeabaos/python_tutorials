@@ -1,6 +1,6 @@
 """ Simple Python Setuptools template.
 
-This template is meant to leverage the setuptools 
+This template is meant to leverage the setuptools
 to facilitate requirements and project dependencies
 management for multiple environments (prod, dev, ...)
 
@@ -20,7 +20,7 @@ requires = [
 ]
 
 dev_requires = [
-    'pylint', 'autopep8', 'python-dotenv', 'pylint-flask',
+    'pylint', 'autopep8', 'python-dotenv',
 ]
 
 test_requires = [
