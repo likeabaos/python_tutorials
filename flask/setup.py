@@ -15,12 +15,14 @@ from setuptools import setup
 # List of all required packages
 ####################################################
 requires = [
-    'flask', 'flask-wtf', 'flask-login', 'flask-sqlalchemy', 'flask_migrate',
+    'flask', 'python-dotenv',
+    'flask-wtf', 'flask-login',
+    'flask-sqlalchemy', 'flask_migrate',
     'flask-bootstrap', 'flask-moment',
 ]
 
 dev_requires = [
-    'pylint', 'autopep8', 'python-dotenv',
+    'rope', 'flake8', 'black',
 ]
 
 test_requires = [
