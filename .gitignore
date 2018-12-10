@@ -1,5 +1,6 @@
 # Virtual Environments
 .pyenv
+.pyvenv
 
 # Python Stuffs
 __pycache__
@@ -18,3 +19,4 @@ migrations
 
 # OS
 .DS_Store
+
